@@ -6,7 +6,7 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:06 by amr21code         #+#    #+#             */
-/*   Updated: 2022/02/19 18:08:52 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/02/22 08:48:39 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd);
 
 #endif
