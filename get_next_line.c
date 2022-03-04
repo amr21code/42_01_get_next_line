@@ -6,7 +6,7 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:01 by amr21code         #+#    #+#             */
-/*   Updated: 2022/03/04 17:53:17 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/03/04 19:49:24 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,17 @@ char	*get_next_line(int fd)
 		return (NULL);
 	main_buf = (char *)ft_calloc(main_size, sizeof(*main_buf));
 	if (!buf)
-		buf = (char *)ft_calloc(BUFFER_SIZE, sizeof(*buf));
+		buf = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(*buf));
 	while (exit > 0)
 	{
 		while (buf[i])
 			i++;
 		exit = read(fd, &buf[i], BUFFER_SIZE);
+		//printf("ex %ld\n", exit);
 		//printf("read %c\n", buf[i]);
-		//printf("i %ld\n", i);
 		while (i < BUFFER_SIZE && buf[i] != '\n' && exit > 0)
 			i++;
+		//printf("i %ld\n", i);
 		if (buf[i] == '\n')
 			exit = 0;
 		if (i >= (main_size - ft_strlen(main_buf) - 1))
@@ -131,7 +132,7 @@ char	*get_next_line(int fd)
 			tmp = (char *)ft_calloc((main_size + BUFFER_SIZE), sizeof(*tmp));
 			ft_memcpy(tmp, main_buf, main_size);
 			free(main_buf);
-			main_buf = (char *)ft_calloc((main_size + BUFFER_SIZE), sizeof(*main_buf));
+			main_buf = (char *)ft_calloc((main_size + main_size), sizeof(*main_buf));
 			ft_memcpy(main_buf, tmp, main_size);
 			main_size += BUFFER_SIZE;
 			free(tmp);
@@ -150,11 +151,15 @@ char	*get_next_line(int fd)
 			ft_bzero(buf, BUFFER_SIZE);
 			i = 0;
 		}
-		//printf("i %ld\n", i);
-			//printf("\n------ PASSED -----\n");
+		//printf("ex %ld\n", exit);
+		//printf("mb %s\n", main_buf);
 	}
-	if (!exit && !main_buf)
+	if (!exit && !main_buf[0])
+	{
+		free(main_buf);
+		//printf("\n------ PASSED -----\n");
 		return (NULL);
+	}
 	return (main_buf);
 }
 
@@ -172,7 +177,7 @@ void	ft_putstr_fd(char *str, int fd)
 		count++;
 	}
 }
-
+/*
 #include <fcntl.h>
 
 int	main(void)
@@ -181,6 +186,7 @@ int	main(void)
 	char	*ptr;
 	fd = open("./test.txt", O_RDONLY);
 		ptr = (char *)get_next_line(fd);
+		//printf("%p\n", ptr);
 		if (ptr)
 		ft_putstr_fd(ptr, 1);
 		ptr = (char *)get_next_line(fd);
@@ -198,4 +204,4 @@ int	main(void)
 		//printf("\n%s\n", ptr);
 	free(ptr);
 	close(fd);
-}
+}*/
