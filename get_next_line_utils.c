@@ -6,18 +6,18 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:04:56 by amr21code         #+#    #+#             */
-/*   Updated: 2022/03/05 09:54:36 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/03/06 12:11:12 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(const char *str, char c)
 {
 	size_t	str_count;
 
 	str_count = 0;
-	while (str[str_count] != '\0')
+	while (str[str_count] != c)
 	{
 		str_count++;
 	}

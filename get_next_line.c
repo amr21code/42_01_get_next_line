@@ -6,7 +6,7 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:01 by amr21code         #+#    #+#             */
-/*   Updated: 2022/03/05 18:38:36 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/03/06 14:40:15 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ char	*get_next_line(int fd)
 	{
 		if (!ft_strchr(buf, '\n'))
 		{
-			while (buf[i])
-				i++;
-			exit = read(fd, &buf[i], BUFFER_SIZE);
+
+			if (ft_strlen(buf, '\0') == 0)
+				exit = read(fd, &buf[i], BUFFER_SIZE);
 			while (i < BUFFER_SIZE && buf[i] != '\n' && exit > 0)
 				i++;
-			if (i >= (main_size - ft_strlen(main_buf) - 1))
+			if (i >= (main_size - ft_strlen(main_buf, '\0') - 1))
 				main_buf = ft_gnl_expand_buf(&main_size, main_buf);
 		}
 		else
@@ -76,15 +76,15 @@ char	*get_next_line(int fd)
 		if (buf[i] == '\n')
 			exit = 0;
 		ft_memcpy(ft_strchr(main_buf, '\0'), buf, (i + 1));
-		printf("mb*%s*nl", main_buf);
-		if (ft_strchr(buf, '\n'))
+		if (ft_strchr(buf, '\n') && (ft_strlen(buf, '\n') < BUFFER_SIZE))
+		{
 			ft_strncpy(buf, (ft_strchr(buf, '\n') + 1), BUFFER_SIZE);
+		}
 		else
 		{
 			ft_bzero(buf, BUFFER_SIZE);
 			i = 0;
 		}
-		printf("\n------ PASSED -----\n");
 	}
 	if (!exit && !main_buf[0])
 	{
@@ -98,7 +98,14 @@ char	*get_next_line(int fd)
 
 
 
-		//printf("ex %ld\n", exit);
+		//printf("\n------ PASSED -----\n");
+			//printf("\nreset\n");
+			//printf("\nbuf_c*%s*nl", buf);
+			//printf("\ncopy\n");
+		//printf("\nbuf*%s*nl", buf);
+			//printf("ex %ld\n", i);
+			//printf("\nbuf_r*%s*nl", buf);
+		//printf("\nmb*%s*nl", main_buf);
 		//printf("read %c\n", buf[i]);
 		//printf("ex %ld\n", exit);
 		//printf("buf %s\n", main_buf);
@@ -117,35 +124,40 @@ void	ft_putstr_fd(char *str, int fd)
 	}
 }
 
-#include <fcntl.h>
+// #include <fcntl.h>
 
-int	main(void)
-{
-	int		fd;
-	char	*ptr;
-	fd = open("./test.txt", O_RDONLY);
-		ptr = (char *)get_next_line(fd);
-		//printf("%p\n", ptr);
-		if (ptr)
-			ft_putstr_fd(ptr, 1);
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*ptr;
+// 	fd = open("./test.txt", O_RDONLY);
+// 		ptr = (char *)get_next_line(fd);
+// 		//printf("%p\n", ptr);
+// 		ft_putstr_fd("output = ", 1);
+// 		if (ptr)
+// 			ft_putstr_fd(ptr, 1);
 
-		ptr = (char *)get_next_line(fd);
-		if (ptr)
-			ft_putstr_fd(ptr, 1);
+// 		ptr = (char *)get_next_line(fd);
+// 		ft_putstr_fd("output = ", 1);
+// 		if (ptr)
+// 			ft_putstr_fd(ptr, 1);
 
-		ptr = (char *)get_next_line(fd);
-		if (ptr)
-			ft_putstr_fd(ptr, 1);
+// 		ptr = (char *)get_next_line(fd);
+// 		ft_putstr_fd("output = ", 1);
+// 		if (ptr)
+// 			ft_putstr_fd(ptr, 1);
 
-		ptr = (char *)get_next_line(fd);
-		if (ptr)
-			ft_putstr_fd(ptr, 1);
+// 		ptr = (char *)get_next_line(fd);
+// 		ft_putstr_fd("output = ", 1);
+// 		if (ptr)
+// 			ft_putstr_fd(ptr, 1);
 
-		ptr = (char *)get_next_line(fd);
-		if (ptr)
-			ft_putstr_fd(ptr, 1);
+// 		ptr = (char *)get_next_line(fd);
+// 		ft_putstr_fd("output = ", 1);
+// 		if (ptr)
+// 			ft_putstr_fd(ptr, 1);
 
-		//printf("\n%s\n", ptr);
-	free(ptr);
-	close(fd);
-}
+// 		//printf("\n%s\n", ptr);
+// 	free(ptr);
+// 	close(fd);
+// }
