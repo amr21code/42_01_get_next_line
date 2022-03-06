@@ -6,7 +6,7 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:01 by amr21code         #+#    #+#             */
-/*   Updated: 2022/03/06 14:40:15 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/03/06 14:52:38 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ char	*get_next_line(int fd)
 	{
 		if (!ft_strchr(buf, '\n'))
 		{
-
 			if (ft_strlen(buf, '\0') == 0)
 				exit = read(fd, &buf[i], BUFFER_SIZE);
 			while (i < BUFFER_SIZE && buf[i] != '\n' && exit > 0)
@@ -69,17 +68,12 @@ char	*get_next_line(int fd)
 				main_buf = ft_gnl_expand_buf(&main_size, main_buf);
 		}
 		else
-		{
-			while (buf[i] != '\n')
-				i++;
-		}
+			i = ft_strlen(buf, '\n');
 		if (buf[i] == '\n')
 			exit = 0;
 		ft_memcpy(ft_strchr(main_buf, '\0'), buf, (i + 1));
 		if (ft_strchr(buf, '\n') && (ft_strlen(buf, '\n') < BUFFER_SIZE))
-		{
 			ft_strncpy(buf, (ft_strchr(buf, '\n') + 1), BUFFER_SIZE);
-		}
 		else
 		{
 			ft_bzero(buf, BUFFER_SIZE);
