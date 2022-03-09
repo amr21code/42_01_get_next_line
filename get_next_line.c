@@ -6,117 +6,134 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:01 by amr21code         #+#    #+#             */
-/*   Updated: 2022/03/06 14:52:38 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/03/09 05:26:11 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		*((char *)dest + i) = *((char *)src + i);
-		i++;
-	}
-	return (dest);
-}
-
-char	*ft_gnl_expand_buf(size_t *main_size, char *main_buf)
+char	*ft_join(char *main_buf, char *buf)
 {
 	char	*tmp;
 
-	tmp = (char *)ft_calloc((*main_size + BUFFER_SIZE), sizeof(*tmp));
-	ft_memcpy(tmp, main_buf, *main_size);
+	tmp = ft_strjoin(main_buf, buf);
 	free(main_buf);
-	main_buf = (char *)ft_calloc((*main_size * 2), sizeof(*tmp));
-	ft_memcpy(main_buf, tmp, *main_size);
-	*main_size += BUFFER_SIZE;
-	free(tmp);
+	return (tmp);
+}
+
+char	*ft_read_file(int fd, char *main_buf)
+{
+	int		exit;
+	char	*buf;
+
+	exit = 1;
+	if (!main_buf)
+		main_buf = (char *)ft_calloc(1, sizeof(*main_buf));
+	buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(*buf));
+	while (exit > 0)
+	{
+		if (ft_strchr(buf, '\n'))
+			exit = 0;
+		else
+		{
+			exit = read(fd, buf, BUFFER_SIZE);
+			buf[exit] = '\0';
+			main_buf = ft_join(main_buf, buf);
+		}
+	}
+	free(buf);
+	return (main_buf);
+}
+
+char	*ft_prepare_line(char *main_buf)
+{
+	char	*line;
+	int		i;
+
+	i = 0;
+	while (main_buf[i] && main_buf[i] != '\n')
+		i++;
+	line = (char *)ft_calloc((i + 2), sizeof(*line));
+	i = 0;
+	while (main_buf[i] && main_buf[i] != '\n')
+	{
+		line[i] = main_buf[i];
+		i++;
+	}
+	if (main_buf[i] == '\n')
+	{
+		line[i] = '\n';
+	}
+	return (line);
+}
+
+char	*ft_prepare_next(char *main_buf, int i, int j)
+{
+	while (main_buf[i] && main_buf[i] != '\n')
+		i++;
+	if (!main_buf[i])
+	{
+		free(main_buf);
+		return (NULL);
+	}
+	if (main_buf[i] == '\n')
+	{
+		i++;
+		while (main_buf[j])
+		{
+			if (main_buf[i])
+			{
+				main_buf[j] = main_buf[i];
+				j++;
+			}
+			else
+				main_buf[j] = '\0';
+			i++;
+		}
+	}
 	return (main_buf);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buf;
-	size_t		i;
-	size_t		exit;
-	char		*main_buf;
-	size_t		main_size;
+	static char	*main_buf;
+	char		*ret;
 
-	main_size = BUFFER_SIZE;
-	exit = 1;
-	i = 0;
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE == 0)
 		return (NULL);
-	main_buf = (char *)ft_calloc(main_size, sizeof(*main_buf));
-	if (!buf)
-		buf = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(*buf));
-	while (exit > 0)
-	{
-		if (!ft_strchr(buf, '\n'))
-		{
-			if (ft_strlen(buf, '\0') == 0)
-				exit = read(fd, &buf[i], BUFFER_SIZE);
-			while (i < BUFFER_SIZE && buf[i] != '\n' && exit > 0)
-				i++;
-			if (i >= (main_size - ft_strlen(main_buf, '\0') - 1))
-				main_buf = ft_gnl_expand_buf(&main_size, main_buf);
-		}
-		else
-			i = ft_strlen(buf, '\n');
-		if (buf[i] == '\n')
-			exit = 0;
-		ft_memcpy(ft_strchr(main_buf, '\0'), buf, (i + 1));
-		if (ft_strchr(buf, '\n') && (ft_strlen(buf, '\n') < BUFFER_SIZE))
-			ft_strncpy(buf, (ft_strchr(buf, '\n') + 1), BUFFER_SIZE);
-		else
-		{
-			ft_bzero(buf, BUFFER_SIZE);
-			i = 0;
-		}
-	}
-	if (!exit && !main_buf[0])
-	{
-		free(main_buf);
+	main_buf = ft_read_file(fd, main_buf);
+	if (!main_buf[0])
 		return (NULL);
-	}
-	return (main_buf);
+	ret = ft_prepare_line(main_buf);
+	main_buf = ft_prepare_next(main_buf, 0, 0);
+	return (ret);
 }
-
-
-
-
 
 		//printf("\n------ PASSED -----\n");
 			//printf("\nreset\n");
-			//printf("\nbuf_c*%s*nl", buf);
 			//printf("\ncopy\n");
 		//printf("\nbuf*%s*nl", buf);
 			//printf("ex %ld\n", i);
 			//printf("\nbuf_r*%s*nl", buf);
 		//printf("\nmb*%s*nl", main_buf);
 		//printf("read %c\n", buf[i]);
-		//printf("ex %ld\n", exit);
 		//printf("buf %s\n", main_buf);
 			//printf("m%c j%d ", buf[j - 1], j);
 			//printf("\n%c\n", main_buf[i - 1]);
 	//printf("\n");
-void	ft_putstr_fd(char *str, int fd)
-{
-	int	count;
 
-	count = 0;
-	while (str[count] != '\0')
-	{
-		write(fd, &str[count], 1);
-		count++;
-	}
-}
+// void	ft_putstr_fd(char *str, int fd)
+// {
+// 	int	count;
+
+// 	count = 0;
+// 	while (str[count] != '\0')
+// 	{
+// 		write(fd, &str[count], 1);
+// 		count++;
+// 	}
+// }
 
 // #include <fcntl.h>
 
@@ -131,7 +148,7 @@ void	ft_putstr_fd(char *str, int fd)
 // 		if (ptr)
 // 			ft_putstr_fd(ptr, 1);
 
-// 		ptr = (char *)get_next_line(fd);
+// 		 ptr = (char *)get_next_line(fd);
 // 		ft_putstr_fd("output = ", 1);
 // 		if (ptr)
 // 			ft_putstr_fd(ptr, 1);
@@ -151,7 +168,7 @@ void	ft_putstr_fd(char *str, int fd)
 // 		if (ptr)
 // 			ft_putstr_fd(ptr, 1);
 
-// 		//printf("\n%s\n", ptr);
+// 		 printf("*%s\n", ptr);
 // 	free(ptr);
 // 	close(fd);
 // }

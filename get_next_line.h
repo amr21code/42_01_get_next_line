@@ -6,7 +6,7 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:06 by amr21code         #+#    #+#             */
-/*   Updated: 2022/03/06 12:11:21 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/03/08 18:20:37 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@
 # endif
 
 char	*get_next_line(int fd);
-size_t	ft_strlen(const char *str, char c);
 char	*ft_strchr(const char *s, int c);
-void	ft_bzero(void *s, size_t n);
-void	*ft_calloc(size_t elem, size_t elsize);
-char	*ft_strncpy(char *dest, char *src, unsigned int n);
+void	ft_bzero(void *s, int n);
+void	*ft_calloc(int elem, int elsize);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif
