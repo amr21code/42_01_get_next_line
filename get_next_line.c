@@ -6,7 +6,7 @@
 /*   By: amr21code <a@n.de>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:01 by amr21code         #+#    #+#             */
-/*   Updated: 2022/03/09 13:10:20 by amr21code        ###   ########.fr       */
+/*   Updated: 2022/03/09 18:20:44 by amr21code        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ char	*ft_read_file(int fd, char *main_buf)
 		else
 		{
 			exit = read(fd, buf, BUFFER_SIZE);
-			if (exit == -1)
-			{
-				free(buf);
-				return (NULL);
-			}
+			// if (exit == -1)
+			// {
+			// 	free(buf);
+			// 	return (NULL);
+			// }
 			buf[exit] = '\0';
 			main_buf = ft_join(main_buf, buf);
 		}
