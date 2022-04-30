@@ -103,13 +103,13 @@ char	*ft_prepare_next(char *main_buf, unsigned int i, unsigned int j)
 
 char	*get_next_line(int fd)
 {
-	static char	**main_buf;
+	static char	*main_buf[FOPEN_MAX];
 	char		*ret;
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE == 0)
 		return (NULL);
 	main_buf[fd] = ft_read_file(fd, main_buf[fd]);
-	if (!main_buf)
+	if (!main_buf[fd])
 		return (NULL);
 	ret = ft_prepare_line(main_buf[fd]);
 	main_buf[fd] = ft_prepare_next(main_buf[fd], 0, 0);
