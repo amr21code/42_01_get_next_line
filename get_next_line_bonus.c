@@ -37,11 +37,11 @@ char	*ft_read_file(int fd, char *main_buf)
 		else
 		{
 			exit = read(fd, buf, BUFFER_SIZE);
-			// if (exit == -1)
-			// {
-			// 	free(buf);
-			// 	return (NULL);
-			// }
+			if (exit == -1)
+			{
+				free(buf);
+				return (NULL);
+			}
 			buf[exit] = '\0';
 			main_buf = ft_join(main_buf, buf);
 		}
@@ -103,15 +103,15 @@ char	*ft_prepare_next(char *main_buf, unsigned int i, unsigned int j)
 
 char	*get_next_line(int fd)
 {
-	static char	*main_buf;
+	static char	**main_buf;
 	char		*ret;
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE == 0)
 		return (NULL);
-	main_buf = ft_read_file(fd, main_buf);
+	main_buf[fd] = ft_read_file(fd, main_buf[fd]);
 	if (!main_buf)
 		return (NULL);
-	ret = ft_prepare_line(main_buf);
-	main_buf = ft_prepare_next(main_buf, 0, 0);
+	ret = ft_prepare_line(main_buf[fd]);
+	main_buf[fd] = ft_prepare_next(main_buf[fd], 0, 0);
 	return (ret);
 }
