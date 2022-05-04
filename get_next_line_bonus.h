@@ -6,7 +6,7 @@
 /*   By: anruland <anruland@students.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:05:06 by anruland          #+#    #+#             */
-/*   Updated: 2022/04/30 14:43:35 by anruland         ###   ########.fr       */
+/*   Updated: 2022/05/04 12:27:45 by anruland         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <limits.h>
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4
+# endif
+
+# ifndef FD_MAX
+#  define FD_MAX 10496
 # endif
 
 int		ft_strlen(const char *str);

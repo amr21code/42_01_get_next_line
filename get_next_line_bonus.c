@@ -103,7 +103,7 @@ char	*ft_prepare_next(char *main_buf, unsigned int i, unsigned int j)
 
 char	*get_next_line(int fd)
 {
-	static char	*main_buf[FOPEN_MAX];
+	static char	*main_buf[FD_MAX];
 	char		*ret;
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE == 0)
